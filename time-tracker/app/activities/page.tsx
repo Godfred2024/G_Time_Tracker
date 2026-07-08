@@ -304,7 +304,7 @@ export default function ActivitiesPage() {
         onClose={() => setShowActivityModal(false)}
         title={editActivityId ? "Modifier l'activité" : "Nouvelle activité"}
       >
-        <div className="space-y-4">
+        <div className="space-y-3">
           <Input
             label="Nom"
             value={actForm.name}
@@ -320,74 +320,73 @@ export default function ActivitiesPage() {
             options={categories.map((c) => ({ value: c.id, label: c.name }))}
           />
 
-          {/* Icon picker — collapsed by default */}
-          <div>
-            <p className="text-sm font-medium text-gray-700 mb-2">Icône</p>
-            <button
-              type="button"
-              onClick={() => { setShowIconPicker((v) => !v); setShowColorPicker(false); }}
-              className="flex items-center gap-3 w-full p-3 bg-gray-50 rounded-xl border border-gray-200 active:bg-gray-100 transition-colors"
-            >
-              <span className="text-2xl">{actForm.icon}</span>
-              <span className="text-sm text-gray-500 flex-1 text-left">Choisir une icône</span>
-              <ChevronDown
-                size={16}
-                className={cn("text-gray-400 transition-transform duration-200", showIconPicker && "rotate-180")}
-              />
-            </button>
-            {showIconPicker && (
-              <div className="mt-2 grid grid-cols-10 gap-1 max-h-44 overflow-y-auto scrollbar-hide bg-gray-50 rounded-xl p-2">
-                {ACTIVITY_ICONS.map((icon) => (
-                  <button
-                    key={icon}
-                    type="button"
-                    onClick={() => { setActForm((f) => ({ ...f, icon })); setShowIconPicker(false); }}
-                    className={cn(
-                      "h-9 w-9 rounded-xl text-lg flex items-center justify-center transition-all",
-                      actForm.icon === icon ? "bg-gray-900" : "hover:bg-gray-200"
-                    )}
-                  >
-                    {icon}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+          {/* Icon & color pickers — side by side to save vertical space */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="relative">
+              <p className="text-sm font-medium text-gray-700 mb-2">Icône</p>
+              <button
+                type="button"
+                onClick={() => { setShowIconPicker((v) => !v); setShowColorPicker(false); }}
+                className="flex items-center gap-2 w-full p-3 bg-gray-50 rounded-xl border border-gray-200 active:bg-gray-100 transition-colors"
+              >
+                <span className="text-xl shrink-0">{actForm.icon}</span>
+                <ChevronDown
+                  size={16}
+                  className={cn("text-gray-400 transition-transform duration-200 ml-auto", showIconPicker && "rotate-180")}
+                />
+              </button>
+              {showIconPicker && (
+                <div className="absolute z-20 top-full left-0 right-0 mt-2 grid grid-cols-6 gap-1 max-h-40 overflow-y-auto scrollbar-hide bg-white rounded-xl p-2 shadow-xl border border-gray-100">
+                  {ACTIVITY_ICONS.map((icon) => (
+                    <button
+                      key={icon}
+                      type="button"
+                      onClick={() => { setActForm((f) => ({ ...f, icon })); setShowIconPicker(false); }}
+                      className={cn(
+                        "h-8 w-8 rounded-lg text-base flex items-center justify-center transition-all",
+                        actForm.icon === icon ? "bg-gray-900" : "hover:bg-gray-200"
+                      )}
+                    >
+                      {icon}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
 
-          {/* Color picker — collapsed by default */}
-          <div>
-            <p className="text-sm font-medium text-gray-700 mb-2">Couleur</p>
-            <button
-              type="button"
-              onClick={() => { setShowColorPicker((v) => !v); setShowIconPicker(false); }}
-              className="flex items-center gap-3 w-full p-3 bg-gray-50 rounded-xl border border-gray-200 active:bg-gray-100 transition-colors"
-            >
-              <div
-                className="w-6 h-6 rounded-full border-2 border-white shadow-sm shrink-0"
-                style={{ backgroundColor: actForm.color }}
-              />
-              <span className="text-sm text-gray-500 flex-1 text-left">Choisir une couleur</span>
-              <ChevronDown
-                size={16}
-                className={cn("text-gray-400 transition-transform duration-200", showColorPicker && "rotate-180")}
-              />
-            </button>
-            {showColorPicker && (
-              <div className="mt-2 flex flex-wrap gap-2 bg-gray-50 rounded-xl p-3">
-                {ACTIVITY_COLORS.map((c) => (
-                  <button
-                    key={c}
-                    type="button"
-                    onClick={() => { setActForm((f) => ({ ...f, color: c })); setShowColorPicker(false); }}
-                    className={cn(
-                      "w-9 h-9 rounded-full border-2 transition-all",
-                      actForm.color === c ? "border-gray-900 scale-110" : "border-transparent"
-                    )}
-                    style={{ backgroundColor: c }}
-                  />
-                ))}
-              </div>
-            )}
+            <div className="relative">
+              <p className="text-sm font-medium text-gray-700 mb-2">Couleur</p>
+              <button
+                type="button"
+                onClick={() => { setShowColorPicker((v) => !v); setShowIconPicker(false); }}
+                className="flex items-center gap-2 w-full p-3 bg-gray-50 rounded-xl border border-gray-200 active:bg-gray-100 transition-colors"
+              >
+                <div
+                  className="w-5 h-5 rounded-full border-2 border-white shadow-sm shrink-0"
+                  style={{ backgroundColor: actForm.color }}
+                />
+                <ChevronDown
+                  size={16}
+                  className={cn("text-gray-400 transition-transform duration-200 ml-auto", showColorPicker && "rotate-180")}
+                />
+              </button>
+              {showColorPicker && (
+                <div className="absolute z-20 top-full left-0 right-0 mt-2 flex flex-wrap gap-2 max-h-40 overflow-y-auto bg-white rounded-xl p-3 shadow-xl border border-gray-100">
+                  {ACTIVITY_COLORS.map((c) => (
+                    <button
+                      key={c}
+                      type="button"
+                      onClick={() => { setActForm((f) => ({ ...f, color: c })); setShowColorPicker(false); }}
+                      className={cn(
+                        "w-8 h-8 rounded-full border-2 transition-all",
+                        actForm.color === c ? "border-gray-900 scale-110" : "border-transparent"
+                      )}
+                      style={{ backgroundColor: c }}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Goal (optional) */}
@@ -448,7 +447,7 @@ export default function ActivitiesPage() {
           />
 
           {/* Category color picker — collapsed by default */}
-          <div>
+          <div className="relative">
             <p className="text-sm font-medium text-gray-700 mb-2">Couleur</p>
             <button
               type="button"
@@ -466,7 +465,7 @@ export default function ActivitiesPage() {
               />
             </button>
             {showCatColorPicker && (
-              <div className="mt-2 flex flex-wrap gap-2 bg-gray-50 rounded-xl p-3">
+              <div className="absolute z-20 top-full left-0 right-0 mt-2 flex flex-wrap gap-2 max-h-40 overflow-y-auto bg-white rounded-xl p-3 shadow-xl border border-gray-100">
                 {CATEGORY_COLORS_PALETTE.map((c) => (
                   <button
                     key={c}

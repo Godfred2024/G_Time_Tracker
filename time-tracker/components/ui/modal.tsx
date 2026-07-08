@@ -37,7 +37,7 @@ export function Modal({ open, onClose, title, children, className }: ModalProps)
         className={cn(
           "relative w-full max-w-lg bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl",
           "animate-in slide-in-from-bottom sm:zoom-in-95 duration-200",
-          "max-h-[92vh] flex flex-col",
+          "max-h-[92vh] overflow-hidden flex flex-col",
           className
         )}
       >
@@ -49,7 +49,7 @@ export function Modal({ open, onClose, title, children, className }: ModalProps)
             </Button>
           </div>
         )}
-        <div className="p-5 overflow-y-auto">{children}</div>
+        <div className="p-5 overflow-y-auto min-h-0 flex-1">{children}</div>
       </div>
     </div>
   );
